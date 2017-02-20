@@ -1,12 +1,20 @@
 package ca.uwo.eng.se2205b.lab03;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.SortedSet;
 
 /**
  * Implement a Trie via linking Nodes.
  */
-public class LinkedTrie implements Trie {
+public class LinkedTrie implements Trie{
+
+    private int size;
+    private Map<SortedSet, String > temp;
+
+    public class TrieNode{
+
+    }
 
     public LinkedTrie() {
 
@@ -14,12 +22,12 @@ public class LinkedTrie implements Trie {
 
     @Override
     public int size() {
-        return 0;
+        return this.size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return this.size ==0;
     }
 
     @Override
