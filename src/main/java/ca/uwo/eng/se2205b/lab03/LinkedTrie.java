@@ -14,6 +14,32 @@ public class LinkedTrie implements Trie{
     private int size;
     private TrieNode root;
 
+    @Override
+    public SortedSet<String> getNextN(@Nonnull String prefix, int N) throws IllegalArgumentException {
+        if( prefix == null || Objects.equals(prefix, "")){
+            throw new IllegalArgumentException();
+        }
+        SortedSet<String> temp = new TreeSet<>();
+        HashMap<Character, TrieNode> tree = this.root.children;
+        prefix = prefix.toLowerCase();
+        TrieNode t = null;
+        String s="";
+        for( int i =0; i< N ; i++){
+            Character check = prefix.charAt(i);
+            if( tree.containsKey(check)){
+
+                s += check;
+            }
+            else{
+                s = "";
+            }
+            if(Objects.equals(s, prefix)){
+                temp.add(s);
+            }
+        }
+        return temp;
+    }
+
     static class TrieNode{
         char c;
         boolean isleaf;
@@ -72,23 +98,6 @@ public class LinkedTrie implements Trie{
             count ++;
         }
         return count;
-    }
-
-    @Override
-    public SortedSet<String> getNextN(@Nonnull String prefix, int N) throws IllegalArgumentException {
-        if( prefix == null || Objects.equals(prefix, "")){
-            throw new IllegalArgumentException();
-        }
-        SortedSet<String> temp = new TreeSet<>();
-        HashMap<Character, TrieNode> tree = this.root.children;
-        TrieNode t = null;
-        for( int i =0; i< N ; i++){
-
-
-
-
-        }
-        return temp;
     }
 
     @Override

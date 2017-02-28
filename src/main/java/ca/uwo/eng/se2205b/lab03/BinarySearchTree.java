@@ -3,9 +3,7 @@ package ca.uwo.eng.se2205b.lab03;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Binary Search Tree
@@ -25,6 +23,7 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
         private BinaryNode<E> left;
         private BinaryNode<E> right;
         private BinaryNode<E> parent;
+        int size;
 
         BinaryNode(E elem, @Nullable BinaryNode parent) {
             this.value = elem;
@@ -50,110 +49,236 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
 
         @Override
         public boolean isInternal() {
-            if( getLeft() != null || getRight() !=null ){
-                return true;
-            }
-            return false;
+            return getLeft() != null || getRight() != null;
         }
 
         @Override
         public boolean isLeaf() {
-            if( getLeft() == null && getRight() == null ){
-                return true;
-            }
-            return false;
-        }
-
-
-
-
-        @Override
-        public int size() {
-            return 0;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-
-        @Override
-        public int height() {
-            return 0;
+            return getLeft() == null && getRight() == null;
         }
 
         @Override
         public boolean isProper() {
-            return false;
+            return isLeaf() || getRight() != null && getLeft() != null;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return isLeaf();
+        }
+
+        @Override
+        public int size() {
+            return this.size;
+        }
+
+        @Override
+        public int height() {
+            return getHeight();
+        }
+
+        private int getHeight(){
+            if (left == null && right == null) {
+                return 0;
+            }
+            return (Math.max(1+left.getHeight(),1+right.getHeight()));
         }
 
         @Override
         public boolean isBalanced() {
+            return getIsBalanced();
+        }
+        private boolean getIsBalanced(){
+            if (left == null && right == null) {
+                return true;
+            }
+            if(left != null && right!= null){
+                return (left.getIsBalanced()&& right.getIsBalanced());
+            }
             return false;
         }
+
+
+
+
 
         @Nonnull
         @Override
         public Collection<? extends Node<E>> children() {
-            return Collections.emptyList();
+            //return Collections.emptyList();
+            return getchildren();
+        }
+        private Collection<? extends Node<E>> getchildren(){
+            Collection<? extends Node<E>> temp = null;
+            BinaryNode<E> curr;
+            if (left == null && right == null) {
+                return temp;
+            }
+            if(left != null && right!= null){
+                temp.add()
+                return (left.getIsBalanced()&& right.getIsBalanced());
+            }
+
         }
 
     }
-
-
 
     @Override
     public Iterator<E> iterator(Traversal how) {
-        if( how != Traversal.InOrder || how != Traversal.PostOrder || how != Traversal.PreOrder ){
+        if( how == Traversal.InOrder){
+            return createInOrderIter();
+        }
+        else if( how == Traversal.PreOrder){
+            return createPreOrderIter();
+        }
+        else if( how == Traversal.PostOrder){
+            return createPostOrderIter();
+        }
+        else{
             throw new UnsupportedOperationException();
         }
-        else if( how == Traversal.InOrder){
-            return createInorderIter(this.root);
+    }
+
+    private Iterator<E> createInOrderIter() {
+        return new InOrderItr();
+    }
+
+    private Iterator<E> createPreOrderIter() {
+        return new PreOrderItr();
+    }
+
+    private Iterator<E> createPostOrderIter() {
+        return new PostOrderItr();
+    }
+
+    private class PreOrderItr implements Iterator<E> {
+        private final Stack<BinaryNode<E>> stack;
+
+        public PreOrderItr() {
+            stack = new Stack<BinaryNode<E>>();
+            stack.add(root);
         }
-//        else if( how == Traversal.PreOrder){
-//            return createPreOrderIter(this.root);
-//        }
-//        else{
-//            return createPostOrderIter(this.root);
-//        }
 
-        //default.
-        return null;
-    }
+        @Override
+        public boolean hasNext(){
+            return !stack.isEmpty();
+        }
+        @Override
+        public E next(){
+            if (!hasNext()) throw new NoSuchElementException("No more nodes remain to iterate");
 
-    private Iterator<E> createInorderIter( BinaryNode<E> temp ){
-        Iterator<E> myIter = new Iterator<E>() {
-            @Override
-            public boolean hasNext() {
-                return false;
+            final BinaryNode<E> temp = stack.pop();
+
+            if (temp.right != null) {
+                stack.push(temp.right);
+            }
+            if (temp.left != null) {
+                stack.push(temp.left);
             }
 
-            @Override
-            public E next() {
-                return null;
-            }
-        };
-
-        return myIter;
+            return temp.value;
+        }
     }
-//    private Iterator<E> createPreOrderIter( BinaryNode<E> temp ){
-//        if(temp == null){
-//
-//        }
-//    }
-//    private Iterator<E> createPostOrderIter( BinaryNode<E> temp ){
-//        if(temp == null){
-//
-//        }
-//    }
 
+    private class TreeNodeDataPostOrder {
+        BinaryNode<E> treeNode;
+        boolean visitedLeftAndRightBranches;
 
+        TreeNodeDataPostOrder(BinaryNode<E> treeNode, Boolean visitedLeftAndRightBranches) {
+            this.treeNode = treeNode;
+            this.visitedLeftAndRightBranches = visitedLeftAndRightBranches;
+        }
+    }
 
+    private class PostOrderItr implements Iterator<E> {
+        private final Stack<TreeNodeDataPostOrder> stack;
+        private PostOrderItr() {
+            stack = new Stack<TreeNodeDataPostOrder>();
+            stack.add(new TreeNodeDataPostOrder(root, false));
+        }
 
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
 
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("No more nodes remain to iterate");
+            }
 
+            while (hasNext()) {
+                final TreeNodeDataPostOrder treeNodeData = stack.peek();
+                final BinaryNode<E> treeNode = treeNodeData.treeNode;
 
+                if (!treeNodeData.visitedLeftAndRightBranches) {
+                    if (treeNode.right != null) {
+                        stack.add(new TreeNodeDataPostOrder(treeNode.right, false));
+                    }
+                    if (treeNode.left != null) {
+                        stack.add(new TreeNodeDataPostOrder(treeNode.left, false));
+                    }
+                    treeNodeData.visitedLeftAndRightBranches = true;
+                } else {
+                    stack.pop();
+                    return treeNode.value;
+                }
+            }
 
+            throw new AssertionError("A node has not been returned when it should have been.");
+        }
+    }
+
+    private class TreeNodeDataInOrder {
+        BinaryNode<E> treeNode;
+        boolean visitedLeftBranch;
+        TreeNodeDataInOrder(BinaryNode<E> treeNode, Boolean foo) {
+            this.treeNode = treeNode;
+            this.visitedLeftBranch = foo;
+        }
+    }
+
+    private class InOrderItr implements Iterator<E> {
+        private final Stack<TreeNodeDataInOrder> stack;
+
+        public InOrderItr() {
+            stack = new Stack<TreeNodeDataInOrder>();
+            stack.add(new TreeNodeDataInOrder(root, false));
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("No more nodes remain to iterate");
+            }
+
+            while (hasNext()) {
+                final TreeNodeDataInOrder treeNodeData = stack.peek();
+                final BinaryNode<E> treeNode = treeNodeData.treeNode;
+
+                if (!treeNodeData.visitedLeftBranch) {
+                    if (treeNode.left != null) {
+                        stack.add(new TreeNodeDataInOrder(treeNode.left, false));
+                    }
+                    treeNodeData.visitedLeftBranch = true;
+                } else {
+                    stack.pop();
+                    if (treeNode.right != null) {
+                        stack.add(new TreeNodeDataInOrder(treeNode.right, false));
+                    }
+                    return treeNode.value;
+                }
+            }
+            throw new AssertionError("A node has not been returned when it should have been.");
+        }
+
+    }
 
     @Nullable
     @Override
@@ -163,7 +288,6 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
     //original plus getter complete probably
     @Override
     public int height() {
-
         return getHeight(this.root);
     }
 
@@ -234,7 +358,7 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
         return this.size == 0;
     }
 
-    public BinarySearchTree() {
+    BinarySearchTree() {
         this.root = null;//empty list
     }
 
@@ -252,6 +376,9 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
     }
 
     private BinaryNode<E> insert ( BinaryNode<E> parent ,BinaryNode<E> tmp, E e) {
+        if(parent != null){
+            parent.size++;
+        }
         if(tmp == null){
             return new BinaryNode<E>(e , parent);
         }
@@ -290,6 +417,7 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
         if(temp == null){
             return null;
         }
+        temp.size--;
         int myValue = e.compareTo( temp.getElement() );
         //less then
         if( myValue < 0 ){
@@ -345,10 +473,6 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
         }
         int leftHeight = getHeight(this.root.left);
         int rightHeight = getHeight(this.root.right);
-        if(Math.abs(leftHeight - rightHeight) > 1 ){
-            return false;
-        }
-        return true;
+        return Math.abs(leftHeight - rightHeight) <= 1;
     }
-
 }

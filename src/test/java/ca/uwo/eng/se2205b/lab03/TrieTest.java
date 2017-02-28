@@ -75,6 +75,12 @@ public class TrieTest {
     @Test
     public void getNextN() throws Exception {
         // Make sure you get the results you expect
+        underTest.put("do");
+        underTest.put("done");
+        SortedSet<String> temp = new TreeSet<>();
+        temp.add("do");
+        temp.add("done");
+        assertEquals(temp, underTest.getNextN("do",4));
     }
 
 }
