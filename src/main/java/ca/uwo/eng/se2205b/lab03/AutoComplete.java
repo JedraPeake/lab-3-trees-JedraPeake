@@ -53,6 +53,9 @@ public class AutoComplete extends Application {
             prefixTrie.put(line);
             line = br.readLine();
         }
+        if (!prefixTrie.isEmpty()){
+            input.setDisable(false);
+        }
     }
 
     /**

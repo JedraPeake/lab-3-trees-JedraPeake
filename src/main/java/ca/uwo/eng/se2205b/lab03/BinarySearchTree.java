@@ -24,6 +24,7 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
         private BinaryNode<E> right;
         private BinaryNode<E> parent;
         int size;
+        Collection<? extends Node<E>> children = null;
 
         BinaryNode(E elem, @Nullable BinaryNode parent) {
             this.value = elem;
@@ -106,21 +107,8 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
         @Override
         public Collection<? extends Node<E>> children() {
             //return Collections.emptyList();
-            return getchildren();
+            return this.children;
         }
-        private Collection<? extends Node<E>> getchildren(){
-            Collection<? extends Node<E>> temp = null;
-            BinaryNode<E> curr;
-            if (left == null && right == null) {
-                return temp;
-            }
-            if(left != null && right!= null){
-                temp.add()
-                return (left.getIsBalanced()&& right.getIsBalanced());
-            }
-
-        }
-
     }
 
     @Override
