@@ -3,6 +3,7 @@
 ###Question 1: Implementing a Binary Search Tree
 ######1)How would you use a BST to implement a Map?
 
+
 ######2)What is the complexity of the operations, put(), remove() and height()? Answer the previous for a guaranteed balanced and unbalanced tree
 
 ###Question 2: Implementing a Trie

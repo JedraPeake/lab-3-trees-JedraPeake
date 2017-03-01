@@ -64,10 +64,9 @@ public class AutoComplete extends Application {
      */
     private void loadAutoComplete() {
         //Read from the input box, and the spinner and calculate the auto complete
-
         // and update the "countLabel" with the number of results.
-
         // TODO SE2205B
+
     }
 
 

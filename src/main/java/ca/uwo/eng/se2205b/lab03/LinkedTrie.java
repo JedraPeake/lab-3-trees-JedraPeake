@@ -1,10 +1,7 @@
 package ca.uwo.eng.se2205b.lab03;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Implement a Trie via linking Nodes.
@@ -27,8 +24,8 @@ public class LinkedTrie implements Trie{
         for( int i =0; i< N ; i++){
             Character check = prefix.charAt(i);
             if( tree.containsKey(check)){
-
-                s += check;
+                s +=check;
+                t = tree.get(check);
             }
             else{
                 s = "";
@@ -40,6 +37,7 @@ public class LinkedTrie implements Trie{
         return temp;
     }
 
+
     static class TrieNode{
         char c;
         boolean isleaf;
@@ -47,6 +45,9 @@ public class LinkedTrie implements Trie{
         public TrieNode() {}
         public TrieNode(char c){
             this.c = c;
+        }
+        public char get(){
+            return this.c;
         }
 
     }

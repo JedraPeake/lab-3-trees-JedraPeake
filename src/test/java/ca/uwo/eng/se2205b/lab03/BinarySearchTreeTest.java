@@ -5,9 +5,7 @@ import org.junit.Test;
 
 import java.util.Iterator;
 
-import static ca.uwo.eng.se2205b.lab03.Tree.Traversal.InOrder;
-import static ca.uwo.eng.se2205b.lab03.Tree.Traversal.PostOrder;
-import static ca.uwo.eng.se2205b.lab03.Tree.Traversal.PreOrder;
+import static ca.uwo.eng.se2205b.lab03.Tree.Traversal.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -239,6 +237,10 @@ public class BinarySearchTreeTest {
         underTest.put(1);
         assertEquals(false, underTest.isProper());
 
+    }
+    @Test
+    public void children () throws Exception {
+        
     }
 
 }
