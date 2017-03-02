@@ -63,18 +63,23 @@ public class AutoComplete extends Application {
      * with the number of results.
      */
     private void loadAutoComplete() {
-        //Read from the input box, and the spinner and calculate the auto complete
-        // and update the "countLabel" with the number of results.
+            //Read from the input box, and resultCounter to load the options ListView with the "auto-completed" options
+            //On the ListView, getItems() returns a List<String>.You can not reassign this List, but you can permutate it (i.e. add, clear, etc.).
+            // This List is what the UI uses to show the ListView's content
+            options.getItems().add(String.valueOf(prefixTrie.getNextN(input.getText(),resultCounter.getValue()+1)));
+            // and update the "countLabel" with the number of results.
+            countLabel.setText(String.valueOf(options.getItems().size()));
         // TODO SE2205B
-
     }
-
 
     @FXML
     protected void initialize() throws IOException {
 
         // TODO SE2205B
         prefixTrie = new LinkedTrie();
+        input.textProperty().addListener((observable, oldValue, newValue) -> {
+            loadAutoComplete();
+        });
         ////////////////////////////////////////
         // DO NOT CHANGE BELOW
         ////////////////////////////////////////
@@ -87,7 +92,6 @@ public class AutoComplete extends Application {
 
         loadTrie();
     }
-
     
     public static void main(String[] args) {
         launch(args);

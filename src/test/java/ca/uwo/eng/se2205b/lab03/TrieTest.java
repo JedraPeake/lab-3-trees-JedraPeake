@@ -77,7 +77,7 @@ public class TrieTest {
         // Make sure you get the results you expect
         underTest.put("do");
         underTest.put("done");
-        SortedSet<String> temp = new TreeSet<>();
+        Set<String> temp = new TreeSet<>();
         temp.add("do");
         temp.add("done");
         assertEquals(temp, underTest.getNextN("do",4));

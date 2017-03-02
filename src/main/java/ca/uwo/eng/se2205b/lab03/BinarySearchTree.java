@@ -109,6 +109,7 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
 
     @Override
     public Iterator<E> iterator(Traversal how) {
+        http://codereview.stackexchange.com/questions/41844/iterator-for-binary-tree-pre-in-and-post-order-iterators
         if( how == Traversal.InOrder){
             return createInOrderIter();
         }
@@ -349,6 +350,9 @@ public class BinarySearchTree< E extends Comparable<E>> implements Tree<E> {
     @Override
     public boolean put(E element) {
         //empty list
+        if(contains(element)){
+            return false;
+        }
         if(this.root == null){
             this.root = new BinaryNode<E>(element, null);
             this.size++;
