@@ -20,4 +20,4 @@ The complexity is O(k),A hashtable is faster with a lookup of O(1)
 A tree(a prefix tree)
 ###Question 3: Creating an AutoComplete
 #####The user interface should function properly, when typing in letters it should make suggestions. Attach a screenshot showing the working application.
-![alt tag]
+![alt tag](https://raw.githubusercontent.com/uwoece-se2205b-2017/lab-3-trees-JedraPeake/master/Capture.PNG?token=AXFuEX_tWvoLFUCrUPSNn68TL_iyp0T7ks5YwZB-wA%3D%3D)
